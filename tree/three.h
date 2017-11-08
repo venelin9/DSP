@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <vector>
 #include <string>
-#include <stack>
+#include <fstream>
 using std::cout;
 
 template <class t>
@@ -21,6 +21,7 @@ struct node{
   node(t _d): data(_d), left(nullptr), right(nullptr){}
   node():left(nullptr),right(nullptr){}
 };
+
 
 template <class t>
 class three{
@@ -47,6 +48,7 @@ private:
     if (r->data==d) return true;
     return find(d, r->left) || find(d, r->right);
   }
+
   void del(node<t> *r){
     if(!r) return;
     del(r->left);
@@ -100,33 +102,45 @@ private:
     check(root,v);
     return v;
   }
+  void check_str(const t& x, node<t>* r, std::string &st)const{
+        if (r->data==x) return;
+        if (find(x, r->left)){
+          st+='L';
+          check_str(x, r->left,st);
+          return;
+        }
+        if (find(x,r->right)){
+          check_str(x, r->right ,st);
+          st+='R';
+          return;
+        }
+  }
 
-  // std::string findtrace(const t& x, node<t> *r, std::stack<char> &st){
-  //   if (x==root->data) return "ROOT";
-  //   st.push('L');
-  //
-  //
-  //   return s;
-  // }
   void pretty(node<t> *r, unsigned n){
-    while (!r->lchildless()) pretty(r->left, n+1);
-    for (unsigned i(0); i<n; i++) cout<<'\t';
+    if (r->left) 
+	pretty(r->left, n+1);
+    for (unsigned i(0); i<n; i++) 
+	cout<<'\t';
     cout<<r->data<<'\n';
-    while (!r->rchildless()) pretty(r->right, n+1);
-    for (unsigned i(0); i<n; i++) cout<<'\t';
-    cout<<r->data<<'\n';
+    if (r->right)
+	pretty(r->right, n+1);
   }
 
 public:
+  
   void pretty(){
       if (!root) return;
       pretty(root,0);
   }
-  // std::string findtrace(const t& x){
-  //   std::stack<char> st;
-  //   if (!root) return "_";
-  //   return findtrace(x,root, st);
-  // }
+
+  std::string findtrace(const t& x)const{
+    if (!root) return "Error";
+    if (root->data==x) return "Root";
+    if (!find(x, root)) return "Not found";
+    std::string st("");
+    check_str(x, root, st);
+    return st;
+  }
 
   std::vector<t> listleaves(){
       std::vector<t> v;
@@ -153,11 +167,6 @@ public:
   unsigned searchCount(bool (*pred)(const t&))const{
     if (!root) return 0;
     return searchCount(pred, root);
-  }
-
-  unsigned countE()const{
-    if (!root) return 0;
-    return countE(root);
   }
 
   unsigned count()const{
