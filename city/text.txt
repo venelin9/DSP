@@ -1,0 +1,2 @@
+kaska nedelq 22 razmer 100
+gard strong 8 immpost 5 construct 11
