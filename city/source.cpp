@@ -30,15 +30,24 @@ string get_inter(string& s){
 	return inter;
 }
 
-int main(){
-	
+void read(){
 	std::ifstream file;
 	file.open("text.txt");
-	string in;
-	getline(file,in);
-	cout<<get_inter(in)<<'\n';
-
+	string read, temp;
+	unsigned i(0);
+	while (!file.eof()){
+		getline(file,read);
+		i=read.find(' ');	
+		temp=read.substr(0,i);
+		read=read.substr(i+1);
+		cout<<temp<<'\n';
+		}
+	
 	file.close();
+}
+
+int main(){
+	read();
 
 	return 0;
 }
