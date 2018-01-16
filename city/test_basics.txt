@@ -1,0 +1,8 @@
+A C 20 B 30 D 11
+C F 25 H 70
+B E 32
+E G 9 H 10
+G H 33
+F D 17
+D A 15
+H H 0

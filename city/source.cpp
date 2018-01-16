@@ -1,53 +1,87 @@
 #include <iostream>
 #include "city.h"
-#include <assert.h>
-#include <fstream>
 using std::cout;
 
 
-void test(){
-
+void test_read(){
 	City c;
-	c.add_street("number", "even", 20);
-	c.add_street("number", "prime", 60);
-	c.add_street("prime", "number", 60);
-	c.add_street("even", "10k", 5000);
-	c.add_street("10k", "big",50);
-	c.add_street("10k", "big",50);
-	c.add_street("prime", "optimus",5220);
-
-	assert(c.has_way("number","big"));
-	assert(c.has_way("number","big"));
-	assert(c.has_way("number","optimus"));
-
+	c.read("test_read.txt");
 	c.print();
 }
 
-string get_inter(string& s){
-	unsigned i=s.find(' ');
-	string inter = s.substr(0,i);
-	s=s.substr(i+1);
-	return inter;
+
+void test_basics(){
+	City c;
+	c.read("test_basics.txt");
+	c.print();
+	cout<<'\n';
+	cout<<"Route A -> G == "<<c.has_route("A","G")<<'\n';
+	cout<<"Route B -> A == "<<c.has_route("B","A")<<'\n';
+	cout<<"Route B -> H == "<<c.has_route("B","H")<<'\n';
+	cout<<'\n';
+
+	c.shortest_routes("A","H");
+	c.shortest_routes("F","C");
+	cout<<'\n';
+
+	//close an intersection and show shortes routes
+	vector<string> closed={"C", "F","D"};
+	c.close_inters_shortest_routes("A", "H", closed);
+	cout<<'\n';
+
+	cout<<"Chain from A == "<<c.check_cycle("A")<<'\n';
+	cout<<"Chain from B == "<<c.check_cycle("B")<<'\n';
+	cout<<"Chain from C == "<<c.check_cycle("C")<<'\n';
+	cout<<'\n';
+	
 }
 
-void read(){
-	std::ifstream file;
-	file.open("text.txt");
-	string read, temp;
-	unsigned i(0);
-	while (!file.eof()){
-		getline(file,read);
-		i=read.find(' ');	
-		temp=read.substr(0,i);
-		read=read.substr(i+1);
-		cout<<temp<<'\n';
-		}
+void test_street_traversal(){
+
+	City c;
+	c.read("test_street_traversal.txt");
+	c.print();
+	cout<<'\n';
+	c.full_trav_streets();
+	cout<<'\n';
+}
+
+void test_intersection_traversal(){
+
+	City c;
+	c.read("test_intersection_traversal.txt");
+	c.print();
+	cout<<'\n';
 	
-	file.close();
+	cout<<"Is A connected to everything else == "<<c.full_inter("A")<<'\n';
+	cout<<"Is B connected to everything else == "<<c.full_inter("B")<<'\n';
+	cout<<'\n';
+	
+	cout<<"Intersection traversal. Strat: C\n";
+	c.full_trav_inters("C");
+	cout<<'\n';
+
+	cout<<"Intersection traversal. Strat: A\n";
+	c.full_trav_inters("A");
+	cout<<'\n';
+}
+
+void test_dead_end(){
+
+	City c;
+	c.read("test_dead_end.txt");
+	c.print();
+	cout<<'\n';
+	c.find_dead_end();
 }
 
 int main(){
-	read();
+
+//	test_read();
+//	test_basics();
+//	test_street_traversal();
+//	test_intersection_traversal();
+//	test_dead_end();
 
 	return 0;
 }
